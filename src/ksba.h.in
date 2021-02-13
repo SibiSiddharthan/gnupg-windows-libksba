@@ -52,6 +52,9 @@ extern "C" {
  * API incompatibilities.  */
 #define KSBA_VERSION_NUMBER @VERSION_NUMBER@
 
+#ifdef _WIN32
+typedef long long ssize_t;
+#endif
 
 
 /* Check for compiler features.  */

@@ -518,7 +518,7 @@ one_file (const char *fname)
             oid?oid:"(null)", s?" (":"",s?s:"",s?")":"");
 
   /* Under Windows the _ksba_keyinfo_from_sexp are not exported.  */
-#ifndef __WIN32
+#ifndef _WIN32
   /* check that the sexp to keyinfo conversion works */
   {
     ksba_sexp_t public;
