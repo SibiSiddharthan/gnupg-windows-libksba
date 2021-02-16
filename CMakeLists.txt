@@ -154,10 +154,12 @@ install(TARGETS ksba
 include(CTest)
 if(BUILD_TESTING)
 
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/oidtranstbl.h
+file(CONFIGURE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/oidtranstbl.h
+CONTENT
 "static struct { char *oid, *desc, *comment; } oidtranstbl[] = {
 	{ NULL, NULL, NULL }
-  };")
+	};"
+NEWLINE_STYLE LF)
 
 set(tests
 cert-basic t-crl-parser t-dnparser t-oid t-reader t-cms-parser t-der-builder)
