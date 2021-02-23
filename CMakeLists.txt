@@ -21,14 +21,15 @@ set(PACKAGE_TARNAME \"${PROJECT_NAME}\")
 set(PACKAGE_URL \"\")
 set(PACKAGE_VERSION \"${PROJECT_VERSION}\")
 set(VERSION \"${PROJECT_VERSION}\")
+math(EXPR VERSION_HEX "(${PROJECT_VERSION_MAJOR} << 16) + (${PROJECT_VERSION_MINOR} << 8) + ${PROJECT_VERSION_PATCH}" OUTPUT_FORMAT HEXADECIMAL)
 
 #find_package(GPGRT REQUIRED)
 include(UtilityFunctions)
-include(CheckCSourceRuns)
-include(alloca)
-include(visibility)
+
 include(LargeFiles)
+include(alloca)
 include(inline)
+include(visibility)
 
 set(BUILD_REVISION \"\")
 set(BUILD_TIMESTAMP \"\")
@@ -55,20 +56,19 @@ if(NOT HAVE_SIZE_T)
 	set(size_t "unsigned\ long\ long")
 endif()
 
-check_c_source_runs("
+check_run("Checking direction of stack growth" "towards higher addresses" "towards lower addresses" "
 int
 find_stack_direction (int *addr, int depth)
 {
-  int dir, dummy = 0;
-  if (! addr)
-    addr = &dummy;
-  *addr = addr < &dummy ? 1 : addr == &dummy ? 0 : -1;
-  dir = depth ? find_stack_direction (addr, depth - 1) : 0;
-  return dir + dummy;
+	int dir, dummy = 0;
+	if (! addr)
+		addr = &dummy;
+	*addr = addr < &dummy ? 1 : addr == &dummy ? 0 : -1;
+	dir = depth ? find_stack_direction (addr, depth - 1) : 0;
+	return dir + dummy;
 }
 
-int
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
   return find_stack_direction (0, argc + !argv + 20) < 0;
 }"
